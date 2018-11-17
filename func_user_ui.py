@@ -58,36 +58,62 @@ def food_choice(category_id):
     choice = int(input("Entrez votre choix: \n"))
     return choice
 
-def substitute_display(category_id):
-    cursor.execute(""" SELECT food.name, food.nutriscore, food.link_openffacts, store.name, food.description
-                    FROM store_food
-                    INNER JOIN food
-                        ON food.id = food_id
+def insert_in_favourite(food_id, substitute_id):
+    ref = (food_id, substitute_id)
+    print("""\n Souhaitez-vous ajouter cette recherche dans vos favoris ?
+                1. Oui
+                0. Non """)
+
+    choice = int(input("Entrez votre choix: \n"))
+    if choice == 1:
+        cursor.execute("INSERT INTO favourite (food_id, substitute_id) VALUES (%s, %s)", ref)
+    else:
+        return
+
+def substitute_display(category_id, food_id):
+    ref = category_id, food_id
+    cursor.execute(""" SELECT food.name, store.name, food.link_openffacts, food.nutriscore, food.description, food.id
+                    FROM food
+                    INNER JOIN store_food
+                        ON food.id = store_food.food_id
                     INNER JOIN store
-                        ON store.id = store_id
-                    WHERE category_food.category_id = %s
+                        ON store_food.store_id = store.id
+                    WHERE food.id IN (SELECT category_food.food_id FROM category_food WHERE category_food.category_id = %s) AND food.id != %s
                     ORDER BY food.nutriscore
-                    LIMIT 1 OFFSET 0""", category_id)
+                    LIMIT 1 OFFSET 0""", ref)
     row = cursor.fetchone()
-    print("Voici un subistitut plus sain que votre choix initial : ")
+    print("Voici un subistitut de votre choix initial : ")
     print(row[0])
-    print(row[4])
+    print(row[3])
     print(row[2])
     print(row[1])
-    print(row[3])
-    #def favourite_screen():
+    print(row[4])
+    return row[5]
 
+def favourite_screen():
+    """cursor.execute(""" SELECT id, food.name
+                        FROM favourite
+                        INNER JOIN food
+                            ON food.id = favourite.food_id
+                            WHERE favourite.id
+                        ORDER BY id """)
+    rows = cursor.fetchall()
+    print("Choisissez votre favoris:")
+    for row in rows:
+        print(row[0], row[1], row[2])"""
 
-while True:
+out = True
+while out == True:
     choice = host()
 
     if choice == 1:
         id_category = categories_choice()
         id_food = food_choice(id_category)
-        substitute_display(id_category)
+        id_substitute = substitute_display(id_category, id_food)
+        insert_in_favourite(id_food, id_substitute)
 
-    #elif choice == 2:
-        #favourite_screen()
+    elif choice == 2:
+        favourite_screen()
     else:
-        sys.exit
+        out = False
 
