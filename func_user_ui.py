@@ -38,9 +38,14 @@ def categories_choice():
     print("Choisissez votre catégorie :")
     for row in rows:
         print(row[0], row[1])
+    while True:
+        try:
+            choice = int(input("Entrez votre choix: \n"))
+            if choice in range(1,100):
+                break
+        except ValueError:
+            continue
 
-
-    choice = int(input("Entrez votre choix: \n"))
     return choice
 
 def food_choice(category_id):
@@ -55,7 +60,14 @@ def food_choice(category_id):
     for row in rows:
         print(row[0], row[1])
 
-    choice = int(input("Entrez votre choix: \n"))
+    while True:
+        try:
+            choice = int(input("Entrez votre choix: \n"))
+            if choice in range(1,1000):
+                break
+        except ValueError:
+            continue
+
     return choice
 
 def insert_in_favourite(food_id, substitute_id):
@@ -91,19 +103,32 @@ def substitute_display(category_id, food_id):
     return row[5]
 
 def favourite_screen():
-    """cursor.execute(""" SELECT id, food.name
+    cursor.execute(""" SELECT *
                         FROM favourite
-                        INNER JOIN food
-                            ON food.id = favourite.food_id
-                            WHERE favourite.id
                         ORDER BY id """)
     rows = cursor.fetchall()
-    print("Choisissez votre favoris:")
+    print("Voici vos recherches sauvegardées:")
     for row in rows:
-        print(row[0], row[1], row[2])"""
+        ref = row[1], row[2]
+        cursor.execute(""" SELECT name
+                        FROM food
+                        WHERE id = %s
+                        UNION
+                        SELECT name
+                        FROM food
+                        WHERE id = %s """, ref)
+        list = cursor.fetchall()
+        i = 0
+        for element in list:
+            if i == 0:
+                print("Produit initial sélectionné: " + element[0], end= "")
+                i += 1
+            else:
+                print(" substitué par : " + element[0])
+        print("-----------------------------------------------------------------")
 
-out = True
-while out == True:
+out = False
+while out == False:
     choice = host()
 
     if choice == 1:
@@ -115,5 +140,5 @@ while out == True:
     elif choice == 2:
         favourite_screen()
     else:
-        out = False
+        out = True
 
