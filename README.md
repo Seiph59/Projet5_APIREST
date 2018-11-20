@@ -20,6 +20,7 @@ To create this solution, we are going to use , Python3, Mysql, and the Openfoodf
 ## Before to start
 
 You will have 4 Files:
+
 	* 2 for the creation of the Database and data insertion
 		* main_db.py
 		*classes_db.py
