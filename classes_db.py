@@ -4,6 +4,12 @@ before to launch be sure to modify with your database informations """
 import pymysql.cursors
 import requests
 
+try:
+    import config
+except ImportError:
+    print("No configuration file found")
+    exit()
+
 
 def criteria(category_name, page_size):
     """To modify the criteria research of the API """
@@ -18,7 +24,7 @@ def criteria(category_name, page_size):
         "action": "process",
         }
 
-    request = requests.get("https://fr.openfoodfacts.org/cgi/search.pl", params=criteria_api)
+    request = requests.get(config.OPENFOODFACTS_URL, params=criteria_api)
     data = request.json()
     return data
 
@@ -27,11 +33,11 @@ class Database:
     """ Class to connect on your MYSQL database and to insert the data directly in """
 
     def __init__(self):
-        self.connection = pymysql.connect(host='localhost',
-                                          user='seiph_',
-                                          password='abc',
-                                          db='projet5',
-                                          charset='utf8mb4',)
+        self.connection = pymysql.connect(host= config.DATABASE_HOST,
+                                          user= config.DATABASE_USER,
+                                          password= config.DATABASE_PASSWORD,
+                                          db= config.DATABASE_NAME,
+                                          charset= config.DATABASE_CHARSET)
         self.cursor = self.connection.cursor()
 
     def create_food_store_category(self):

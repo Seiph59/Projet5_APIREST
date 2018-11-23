@@ -1,6 +1,11 @@
 """File linked with 'main_user.py'  """
 import pymysql.cursors
 
+try:
+    import config
+except ImportError:
+    print("No configuration file found")
+    exit()
 
 def host():
     """ Display the 'home menu' """
@@ -27,11 +32,11 @@ class Interface:
     to access to your database) """
 
     def __init__(self):
-        self.connection = pymysql.connect(host='localhost',
-                                          user='seiph_',
-                                          password='abc',
-                                          db='projet5',
-                                          charset='utf8mb4',)
+        self.connection = pymysql.connect(host= config.DATABASE_HOST,
+                                          user= config.DATABASE_USER,
+                                          password= config.DATABASE_PASSWORD,
+                                          db= config.DATABASE_NAME,
+                                          charset= config.DATABASE_CHARSET)
         self.cursor = self.connection.cursor()
 
     def categories_choice(self):
@@ -115,11 +120,11 @@ class Interface:
                                           LIMIT 1 OFFSET 0""", ref)
         row = self.cursor.fetchone()
         print("Voici un subistitut de votre choix initial : ")
-        print(row[0])
-        print(row[3])
-        print(row[2])
-        print(row[1])
-        print(row[4])
+        print("Nom du produit : " + row[0])
+        print("Grade nutriscore : " + row[3])
+        print("Lien OpenFoodFacts : " + row[2])
+        print("Magasin(s) : " + row[1])
+        print("Description du produit : " + row[4])
         return row[5]
 
     def favourite_screen(self):

@@ -31,14 +31,12 @@ You will have 4 Files:
 
 ### How to use step by step ? 
 
-1. You need to create you own database and modify the informations in the constructor of  the class "Database" , with yours. (main_db.py)
+1. You need to create you own database, copy the settings in config_exemple.py and paste in your file "config.py"
 
-2. To put the language research in English, Replace "https://fr.openfoodfacts.org/cgi/search.pl" by " https://world.openfoodfacts.org/cgi/search.pl" in the "criteria" method  (main_db.py)
+2. To put the language research in English, Replace "https://fr.openfoodfacts.org/cgi/search.pl" by " https://world.openfoodfacts.org/cgi/search.pl" in the file "config.py"
 
 3. To change or modify the different criteria, you need to refer to this link [Wiki API Read Search] (https://en.wiki.openfoodfacts.org/API/Read/Search)
 
 4. Then you can launch "main_db.py"
 
-5. Once installed, you can open the file "classes_user.py" and modifiy once again your connection informations for the database 
-
-6. Finally, launch "main_user.py"
+5. Finally, launch "main_user.py"
