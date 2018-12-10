@@ -6,8 +6,8 @@ import classes_user
 
 ui_user = classes_user.Interface()
 
-loop = 1
-while loop == 1:
+loop = True
+while loop == True:
     choice = classes_user.host()
 
     if choice == 1:
@@ -20,4 +20,4 @@ while loop == 1:
         ui_user.favourite_screen()
     else:
         ui_user.connection.commit()
-        loop = 0
+        loop = False

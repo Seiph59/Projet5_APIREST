@@ -47,12 +47,14 @@ class Interface:
                             ORDER BY id LIMIT 5 OFFSET 0""")
         rows = self.cursor.fetchall()
         print("Choisissez votre catégorie :")
-        for row in rows:
-            print(row[0], row[1])
+        possible_choice = []
         while True:
             try:
+                for row in rows:
+                    possible_choice.append(row[0])
+                    print(row[0], row[1])
                 choice = int(input("Entrez votre choix: \n"))
-                if choice in range(1, 100):
+                if choice in possible_choice:
                     break
             except ValueError:
                 continue
@@ -70,13 +72,14 @@ class Interface:
                     ORDER BY id LIMIT 8 OFFSET 0""", category_id)
         rows = self.cursor.fetchall()
         print("Choisissez votre aliment :")
-        for row in rows:
-            print(row[0], row[1])
-
+        possible_choice = []
         while True:
             try:
+                for row in rows:
+                    possible_choice.append(row[0])
+                    print(row[0], row[1])
                 choice = int(input("Entrez votre choix: \n"))
-                if choice in range(1, 1000):
+                if choice in possible_choice:
                     break
             except ValueError:
                 continue
